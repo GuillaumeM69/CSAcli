@@ -1,5 +1,11 @@
 pipeline {
     agent any
+     environment {
+        CSA_Host = 'upgrade01'
+        CSA_Port    = '8178'
+         CSA_Login = 'root'
+         CSA_Password = '123456'
+    }
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
         text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
@@ -11,7 +17,9 @@ pipeline {
     stages {
         stage('INIT') {
             steps {
-                echo "Starting Stage INIT"              
+                echo "Starting Stage INIT" 
+                powershell returnStatus: true, script: 'npm install'
+                powershell returnStatus: true, script: 'node scan.js'
             }
         }
         stage('RESTORE') {
