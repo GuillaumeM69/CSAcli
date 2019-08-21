@@ -21,6 +21,7 @@ pipeline {
             steps {
                 echo "Starting Stage INIT" 
                 bat 'npm install'
+                bat 'check.bat'
              //   bat 'node scan.js'
             }
         }
