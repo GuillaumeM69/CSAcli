@@ -18,8 +18,8 @@ pipeline {
         stage('INIT') {
             steps {
                 echo "Starting Stage INIT" 
-                powershell returnStatus: true, script: 'npm install'
-                powershell returnStatus: true, script: 'node scan.js'
+                bat 'npm install'
+                bat 'node scan.js'
             }
         }
         stage('RESTORE') {
