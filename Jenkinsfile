@@ -53,8 +53,11 @@ pipeline {
                 echo 'Starting Stage 402'
                // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
                 //bat 'node clean.js'
+             script {
                 def msg = powershell(returnStdout: true, script: 'node scan.js')
                 println msg
+            }
+                
                 bat 'node check.js ${response.execResult}'
                 //  bat 'node deploy.js'          
             }
