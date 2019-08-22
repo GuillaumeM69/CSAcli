@@ -72,11 +72,11 @@ pipeline {
                // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
                 //bat 'node clean.js'
              script {
-                def msg = bat(returnStdout: true, script: 'node scan.js')
+                def msg = bat(returnStdout: true, script: 'node test.js')
                 println msg
             }
                 
-              //  bat 'node check.js ${response.execResult}'
+                bat 'node test2.js ${msg.execResult}'
                 //  bat 'node deploy.js'          
             }
         }
