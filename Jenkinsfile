@@ -76,7 +76,7 @@ pipeline {
                 println msg
             }
                 
-                bat 'node check.js ${response.execResult}'
+              //  bat 'node check.js ${response.execResult}'
                 //  bat 'node deploy.js'          
             }
         }

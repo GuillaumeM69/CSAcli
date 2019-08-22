@@ -9,7 +9,7 @@ const CSAdminPort = process.env.CSA_Port
 const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
-const CSAEQUIP = process.env.CSA_EQUIP
+
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 
 var SoapClient = soap.createClient(url, function(err, client) {
@@ -17,7 +17,7 @@ var SoapClient = soap.createClient(url, function(err, client) {
   {throw err}  
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
 
-    client.execAction({ '_xml':scan_xml(CSAEQUIP)},function(err,result){
+    client.execAction({ '_xml':deploy_xml("upgrade-420-mssql","carlsource_v5.0.1")},function(err,result){
         if(err){
             {throw err}  
         }
@@ -29,7 +29,7 @@ var SoapClient = soap.createClient(url, function(err, client) {
 
 
 
-function scan_xml(equip)
+function deploy_xml(equip,addDistribs)
 {
 
     //Génération d'un code XML compatible avec les types "string" attendus par le WS
@@ -45,10 +45,22 @@ function scan_xml(equip)
     '<entry>\
     <key>action</key>\
     <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">scan</value>\
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">deploy</value>\
     </entry>'
 +
-    '</args></ns1:execAction>';
+'<entry>\
+<key>addDistribs</key>\
+<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+addDistribs+'</value> \
+</entry>'
++
+'<entry>\
+<key>backupBefore</key>\
+<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">false</value>\
+</entry>'
++
+'</args></ns1:execAction>';
 
 
 }
