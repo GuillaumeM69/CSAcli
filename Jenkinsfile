@@ -52,15 +52,8 @@ pipeline {
                 
                 echo 'Starting Stage 402'
                // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
-                //bat 'node clean.js'
-             script {
-                def msg = bat(returnStdout: true, script: 'node clean.js')
-                println msg
             }
-                
-                bat 'node check.js ${response.execResult}'
-                //  bat 'node deploy.js'          
-            }
+             
         }
         stage('420') {
 
@@ -73,8 +66,18 @@ pipeline {
         CSA_EQUIP = 'upgrade-420-mssql'
         }
          
-            steps {
-                echo 'Starting Stage 420'              
+         steps {
+                
+             echo 'Starting Stage 402'
+               // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
+                //bat 'node clean.js'
+             script {
+                def msg = bat(returnStdout: true, script: 'node scan.js')
+                println msg
+            }
+                
+                bat 'node check.js ${response.execResult}'
+                //  bat 'node deploy.js'          
             }
         }
         stage('501') {
