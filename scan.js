@@ -11,7 +11,7 @@ const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
 const CSAEQUIP = process.env.CSA_EQUIP
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
-
+console.log(url)
 var SoapClient = soap.createClient(url, function(err, client) {
   if(err)
   {throw err}  
