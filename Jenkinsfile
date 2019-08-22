@@ -54,7 +54,7 @@ pipeline {
                // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
                 //bat 'node clean.js'
              script {
-                def msg = powershell(returnStdout: true, script: 'node scan.js')
+                def msg = bat(returnStdout: true, script: 'node clean.js')
                 println msg
             }
                 
