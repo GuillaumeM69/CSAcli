@@ -73,10 +73,10 @@ pipeline {
                 //bat 'node clean.js'
              script {
                 def msg = bat(returnStdout: true, script: 'node test.js')
-                println msg.test
-                bat 'node test2.js ${msg.execResult}'
-            }
                 
+            }
+                println msg
+                bat 'node test2.js ${msg}'
          
                 //  bat 'node deploy.js'          
             }
