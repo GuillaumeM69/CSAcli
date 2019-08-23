@@ -45,8 +45,9 @@ function CheckAction(client,Id){
         }else if (result[0].getActionStatus == 'DONE')
         {    
         console.log(new Date().toString() + ': DEPLOY done on '+CSAEQUIP)
-        }else{
-            throw (result[0])      
+        }else if (result[0].getActionStatus == 'FAILED')
+        {
+            console.log(new Date().toString() + ': DEPLOY FAILED on '+CSAEQUIP)
             process.exit(5);
         }
        
