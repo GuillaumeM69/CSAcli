@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '420'
+        CSA_DEPLOY_FROM = '402'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'OFF'
         CSA_DB = 'MSSQL'
@@ -73,7 +73,7 @@ pipeline {
          steps {
                 echo 'Starting Stage 420'  
                  script {
-                    if (env.CSA_DEPLOY_FROM < '420') {
+                    if (env.CSA_DEPLOY_FROM <= '402') {
                         bat 'node scan.js'
                     }
                     bat 'node deploy.js'
@@ -96,7 +96,7 @@ pipeline {
             steps {
                 echo 'Starting Stage 501'  
                  script {
-                    if (env.CSA_DEPLOY_FROM < '420') {
+                    if (env.CSA_DEPLOY_FROM <= '402') {
                         bat 'node scan.js'
                     }
                     bat 'node deploy.js'
