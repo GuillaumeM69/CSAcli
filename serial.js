@@ -17,14 +17,7 @@ soap.createClientAsync(url)
 .then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
     console.log(new Date().toString() + ': Starting action on '+CSAEQUIP)
-
-    client.addLicenseAsync({licenseId:CSASerialNumber,name:CSASerialNumber})
-    .catch((err)=>{
-        console.log(new Date().toString() + ': err to create Licence');
-    })
-    .then((result) => {
-        console.log(new Date().toString() + ': Licence ' + JSON.stringify(result, null, 2)) 
-    
+ 
     client.getEquipmentInfoAsync({EquipmentName:CSAEQUIP})
     .then((result)=>{
         for (let index = 0; index < result[0].getEquipmentInfo.entry.length; index++) {
@@ -44,20 +37,25 @@ soap.createClientAsync(url)
       client.updateEquipmentAsync({'_xml':getXml(CSAEQUIP,CSASerialNumber,CSAdatasource)})
       .then((result)=>{
         console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))
-      });
+      })
+      .catch(err=>{
+        console.log(JSON.stringify(err.cause.body, null, 2));;
+        process.exit(5);
+    });
    })
    .catch(err=>{
-       throw (err);
+      
+       console.log(JSON.stringify(err.cause.body, null, 2));
+       process.exit(5);
    });
         
 
         })
+        .catch(err=>{
+            console.log(JSON.stringify(err.cause.body, null, 2));
+            process.exit(5);
+        })
       
-   
-
-        
-    });
-
 });
 
 function getXml(equip,licence,datasource = false)

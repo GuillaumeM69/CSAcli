@@ -6,33 +6,56 @@ var soap = require('soap');
 //Définition des variables
 const CSAdminHost = process.env.CSA_Host
 const CSAdminPort = process.env.CSA_Port
-const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
-//const CSAEQUIP = process.env.CSA_EQUIP
-const CSAEQUIP = 'upgrade-420-mssql'
+const CSAEQUIP = process.env.CSA_EQUIP
 const CSABackupDAT = process.env.CSA_BACKUP_DAT
 const CSAPathDocs = process.env.CSA_PATH_DOCS
-var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
+var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
-var SoapClient = soap.createClient(url, function(err, client) {
-  if(err)
-  {throw err}  
+soap.createClientAsync(url)
+.then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
-
-    client.execAction({ '_xml':restore_xml(CSAEQUIP)},function(err,result){
-        if(err){
-            {throw err}  
-        }
-    console.log(result);
-        
-        
+    console.log(new Date().toString() + ': Starting RESTORE on '+CSAEQUIP)
+    client.execActionAsync({ '_xml':restore_xml(CSAEQUIP,CSABackupDAT,CSAPathDocs)})
+    .then((result) => {
+        console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2));    
+        CheckAction(client,result[0].execResult);
+    })
+    .catch((err)=>{
+        console.log("-----------------------------ERROR------------------------------")
+        console.log(JSON.stringify(err.cause.body, null, 2));
+        process.exit(5);
     });
+
+
 });
 
+function CheckAction(client,Id){
+    console.log(new Date().toString() + ': Check State of RESTORE on '+CSAEQUIP)
+    client.getActionStatusAsync({actionId:Id})
+    .then((result) => {
+     
+        //console.log(result[0].getActionStatus);
+        if (result[0].getActionStatus == 'RUNNING')
+        {
+       setTimeout(() => {
+        CheckAction(client,Id)
+       }, 10000);
+          
+        }else if (result[0].getActionStatus == 'DONE')
+        {    
+        console.log(new Date().toString() + ': RESTORE done on '+CSAEQUIP)
+        }else{
+            throw (result[0])      
+            process.exit(5);
+        }
+       
+      
+    });
+}
 
-
-function restore_xml(equip,addDistribs)
+function restore_xml(Equipement,FichierDAT,PathRestore)
 {
 
     //Génération d'un code XML compatible avec les types "string" attendus par le WS
@@ -42,7 +65,7 @@ function restore_xml(equip,addDistribs)
     '<entry> \
     <key>equip</key> \
     <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  \
-        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+equip+'</value> \
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+Equipement+'</value> \
     </entry>'
 +
     '<entry>\
@@ -54,7 +77,7 @@ function restore_xml(equip,addDistribs)
 '<entry>\
 <key>backupFile</key>\
 <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+CSABackupDAT+'</value> \
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+FichierDAT+'</value> \
 </entry>'
 +
 '<entry>\
@@ -66,7 +89,7 @@ function restore_xml(equip,addDistribs)
 '<entry>\
 <key>baseDir</key>\
 <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+CSAPathDocs+'</value>\
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">'+PathRestore+'</value>\
 </entry>'
 +
 '<entry>\
@@ -79,3 +102,4 @@ function restore_xml(equip,addDistribs)
 
 
 }
+

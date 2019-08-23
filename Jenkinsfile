@@ -10,10 +10,6 @@ pipeline {
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'OFF'
         CSA_DB = 'MSSQL'
-        CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
-        CSA_BACKUP_PATH = 'C:/BACKUP'
-        CSA_BACKUP_APP = 'backup_S1400467_app_jb_16ca96d905d-5d_20190819163454009'
-        CSA_BACKUP_DAT = 'backup_S1400467_dat_ms_16ca96d905d-5d_20190819163454009.zip'
         CSA_SERIAL_NUMBER = 'S1400467'
     }
     stages {
@@ -24,12 +20,28 @@ pipeline {
                 bat 'node addlicence.js'
             }
         }
-        stage('RESTORE') {
+        stage('RESTORE 402') {
          when{
-            expression { env.CSA_MANUAL_RESTORE == 'OFF'}
+            expression { env.CSA_MANUAL_RESTORE == 'OFF' && env.CSA_DEPLOY_FROM = '402'}
+         }
+         environment{
+             CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
+             CSA_BACKUP_PATH = 'C:/BACKUP'
+             CSA_BACKUP_APP = 'backup_S1400467_app_jb_16ca96d905d-5d_20190819163454009.zip'
+             CSA_BACKUP_DAT = 'backup_S1400467_dat_ms_16ca96d905d-5d_20190819163454009.zip'
+             CSA_Host = 'upgrade01'
+             CSA_Port = '8177'
+             CSA_EQUIP = 'upgrade-420-mssql'
          }
             steps {
-                echo 'Starting Stage RESTORE'              
+                echo 'Starting Stage RESTORE' 
+                script {
+                    if (env.CSA_DEPLOY_FROM = '402')
+                     {
+                        bat 'node serial.js'
+                        bat 'node restore.js'
+                    }
+                }
             }
         }
         stage('312') {
