@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+ agent any
      environment {
         CSA_Host = 'upgrade01'
         CSA_Port = '8177'
@@ -21,6 +21,7 @@ pipeline {
                 echo 'Starting Stage INIT' 
                 bat 'npm install'
                 bat 'node addlicence.js'
+            }
         }
         stage('RESTORE') {
          when{
@@ -103,17 +104,17 @@ pipeline {
             }
         }
         stage('Backup') {
-             environment { 
-                CSA_Host = 'upgrade01'
-                CSA_Port = '8178'
-                CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-                CSA_DEPLOY_DISTRIBS = 'carlsource_v5.0.1'
-                    }
-                steps {
+            environment { 
+            CSA_Host = 'upgrade01'
+            CSA_Port = '8178'
+            CSA_EQUIP = 'upgrade-501-mssql-tomcat'
+            CSA_DEPLOY_DISTRIBS = 'carlsource_v5.0.1'
+            }
+            steps {
                 echo 'Starting Stage BACKUP'
                 bat 'node backup.js'
-                }
             }
         }
-    }   
+    }
 }
+
