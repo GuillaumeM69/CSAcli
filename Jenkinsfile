@@ -22,7 +22,7 @@ pipeline {
         }
         stage('RESTORE 402') {
          when{
-            expression { env.CSA_MANUAL_RESTORE == 'OFF' && env.CSA_DEPLOY_FROM = '402'}
+            expression { env.CSA_MANUAL_RESTORE == 'OFF' && env.CSA_DEPLOY_FROM == '402'}
          }
          environment{
              CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 echo 'Starting Stage RESTORE' 
                 script {
-                    if (env.CSA_DEPLOY_FROM = '402')
+                    if (env.CSA_DEPLOY_FROM == '402')
                      {
                         bat 'node serial.js'
                         bat 'node restore.js'
