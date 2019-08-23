@@ -23,8 +23,11 @@ soap.createClientAsync(url)
       
     })
     .catch((err)=>{
-        throw (err)
+        console.log("-----------------------------ERROR------------------------------")
+        console.log(JSON.stringify(err.cause.body, null, 2));
+        process.exit(5);
     });
+
 
 });
 function CheckAction(client,Id){
