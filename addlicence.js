@@ -9,26 +9,20 @@ const CSAdminPort = process.env.CSA_Port
 const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
-const ID = '20190822102824828_9547'
+const CSASerialNumber = process.env.CSA_SERIAL_NUMBER
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
-var SoapClient = soap.createClient(url, function(err, client) {
-  if(err)
-  {throw err}  
+soap.createClientAsync(url)
+.then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
-    client.getActionStatus({actionId:ID },function(err,result){
-        if(err){
-            throw (err);
-        }
-       console.log(result);
 
-
-        process.stdout.write(JSON.stringify(result, null, 2));
+    client.addLicenseAsync({licenseId:CSASerialNumber,name:CSASerialNumber})
+    .catch((err)=>{
+        console.log(new Date().toString() + ': err to create Licence');
+    })
+    .then((result) => {
+        console.log(new Date().toString() + ': Licence ' + JSON.stringify(result, null, 2)) 
+         
     });
 
-
-
-
 });
-
-

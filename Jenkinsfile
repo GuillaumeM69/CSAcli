@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '312'
+        CSA_DEPLOY_FROM = '402'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_DB = 'MSSQL'
         CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
@@ -20,8 +20,7 @@ pipeline {
             steps {
                 echo 'Starting Stage INIT' 
                 bat 'npm install'
-
-            }
+                bat 'node addlicence.js'
         }
         stage('RESTORE') {
          when{
@@ -47,11 +46,14 @@ pipeline {
         CSA_Host = 'upgrade01'
         CSA_Port = '8177'
         CSA_EQUIP = 'upgrade-402-mssql'
+        CSA_DEPLOY_DISTRIBS = 'carlsource_v4.0.2'
+
         }
             steps {
                 
                 echo 'Starting Stage 402'
                // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
+                bat 'node deploy.js'
             }
              
         }
@@ -64,21 +66,19 @@ pipeline {
         CSA_Host = 'upgrade01'
         CSA_Port = '8177'
         CSA_EQUIP = 'upgrade-420-mssql'
+        CSA_DEPLOY_DISTRIBS = 'carlsource_v4.2.0'
         }
-         
          steps {
-                
-             echo 'Starting Stage 402'
-               // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
-                //bat 'node clean.js'
-             script {
-                def msg = bat(returnStdout: true, script: 'node test.js')
-                
-            }
-                println msg
-                bat 'node test2.js ${msg}'
-         
-                //  bat 'node deploy.js'          
+                echo 'Starting Stage 420'  
+                 script {
+                    if (env.CSA_DEPLOY_FROM < '420') {
+                        bat 'node scan.js'
+                    }
+                    bat 'node deploy.js'
+                 // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
+                 //def msg = bat(returnStdout: true, script: 'node test.js')
+                 }
+                            
             }
         }
         stage('501') {
@@ -88,15 +88,30 @@ pipeline {
         environment { 
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'
-        CSA_EQUIP = 'upgrade-501-mssql'
+        CSA_EQUIP = 'upgrade-501-mssql-jboss'
+        CSA_DEPLOY_DISTRIBS = 'carlsource_v5.0.1'
         }
             steps {
-                echo 'Starting Stage 501'              
+                echo 'Starting Stage 501'  
+                 script {
+                    if (env.CSA_DEPLOY_FROM < '501') {
+                        bat 'node scan.js'
+                    }
+                    bat 'node deploy.js'
+                 }
+                            
             }
         }
         stage('Backup') {
+        environment { 
+        CSA_Host = 'upgrade01'
+        CSA_Port = '8178'
+        CSA_EQUIP = 'upgrade-501-mssql-tomcat'
+        CSA_DEPLOY_DISTRIBS = 'carlsource_v5.0.1'
+        }
             steps {
-                echo 'Starting Stage BACKUP'              
+                echo 'Starting Stage BACKUP'
+                bat 'node backup.js'
             }
         }
     }

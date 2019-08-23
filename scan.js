@@ -6,30 +6,48 @@ var soap = require('soap');
 //Définition des variables
 const CSAdminHost = process.env.CSA_Host
 const CSAdminPort = process.env.CSA_Port
-const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
 const CSAEQUIP = process.env.CSA_EQUIP
-var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
+var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
-var SoapClient = soap.createClient(url, function(err, client) {
-  if(err)
-  {throw err}  
+soap.createClientAsync(url)
+.then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
+    console.log(new Date().toString() + ': Starting SCAN on '+CSAEQUIP)
+    client.execActionAsync({ '_xml':xml(CSAEQUIP)})
+    .then((result) => {
 
-    client.execAction({ '_xml':scan_xml(CSAEQUIP)},function(err,result){
-        if(err){
-            {throw err}  
-        }
-    console.log(result);
-        
-        
+        console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))    
+        CheckAction(client,result[0].execResult)
+      
     });
+
 });
+function CheckAction(client,Id){
+    console.log(new Date().toString() + ': Check State of SCAN on '+CSAEQUIP)
+    client.getActionStatusAsync({actionId:Id})
+    .then((result) => {
+     
+        //console.log(result[0].getActionStatus);
+        if (result[0].getActionStatus == 'RUNNING')
+        {
+       setTimeout(() => {
+        CheckAction(client,Id)
+       }, 5000);
+          
+        }else if (result[0].getActionStatus == 'DONE')
+        {    
+        console.log(new Date().toString() + ': SCAN done on '+CSAEQUIP)
+        }else{
+            throw (result[0])
+        }
+       
+      
+    });
+}
 
-
-
-function scan_xml(equip)
+function xml(equip)
 {
 
     //Génération d'un code XML compatible avec les types "string" attendus par le WS

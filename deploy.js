@@ -9,27 +9,47 @@ const CSAdminPort = process.env.CSA_Port
 const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
+const CSAEQUIP = process.env.CSA_EQUIP
+const CSADeployDistribs = process.env.CSA_DEPLOY_DISTRIBS
+var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
-var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
-
-var SoapClient = soap.createClient(url, function(err, client) {
-  if(err)
-  {throw err}  
+soap.createClientAsync(url)
+.then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
+    console.log(new Date().toString() + ': Starting DEPLOY on '+CSAEQUIP)
+    client.execActionAsync({ '_xml':xml(CSAEQUIP,CSADeployDistribs)})
+    .then((result) => {
 
-    client.execAction({ '_xml':deploy_xml("upgrade-420-mssql","carlsource_v5.0.1")},function(err,result){
-        if(err){
-            {throw err}  
-        }
-    console.log(result);
-        
-        
+        console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))    
+        CheckAction(client,result[0].execResult)
+      
     });
+
 });
+function CheckAction(client,Id){
+    console.log(new Date().toString() + ': Check State of DEPLOY on '+CSAEQUIP)
+    client.getActionStatusAsync({actionId:Id})
+    .then((result) => {
+     
+        //console.log(result[0].getActionStatus);
+        if (result[0].getActionStatus == 'RUNNING')
+        {
+       setTimeout(() => {
+        CheckAction(client,Id)
+       }, 5000);
+          
+        }else if (result[0].getActionStatus == 'DONE')
+        {    
+        console.log(new Date().toString() + ': DEPLOY done on '+CSAEQUIP)
+        }else{
+            throw (result[0])
+        }
+       
+      
+    });
+}
 
-
-
-function deploy_xml(equip,addDistribs)
+function xml(equip,addDistribs)
 {
 
     //Génération d'un code XML compatible avec les types "string" attendus par le WS

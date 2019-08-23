@@ -15,7 +15,7 @@ var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 soap.createClientAsync(url)
 .then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
-    console.log(new Date().toString() + ': Starting CLEAN on '+CSAEQUIP)
+    console.log(new Date().toString() + ': Starting BACKUP on '+CSAEQUIP)
     client.execActionAsync({ '_xml':xml(CSAEQUIP)})
     .then((result) => {
 
@@ -26,7 +26,7 @@ soap.createClientAsync(url)
 
 });
 function CheckAction(client,Id){
-    console.log(new Date().toString() + ': Check State of CLEAN on '+CSAEQUIP)
+    console.log(new Date().toString() + ': Check State of BACKUP on '+CSAEQUIP)
     client.getActionStatusAsync({actionId:Id})
     .then((result) => {
      
@@ -39,7 +39,7 @@ function CheckAction(client,Id){
           
         }else if (result[0].getActionStatus == 'DONE')
         {    
-        console.log(new Date().toString() + ': CLEAN done on '+CSAEQUIP)
+        console.log(new Date().toString() + ': BACKUP done on '+CSAEQUIP)
         }else{
             throw (result[0])
         }
@@ -64,7 +64,7 @@ function xml(equip)
     '<entry>\
     <key>action</key>\
     <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">clean</value>\
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">backup</value>\
     </entry>'
 +
     '</args></ns1:execAction>';
