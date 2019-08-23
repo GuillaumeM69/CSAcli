@@ -1,5 +1,3 @@
-import { throws } from 'assert';
-
 //Chargement du fichier .env
 require('dotenv').config()
 //Import du client SOAP

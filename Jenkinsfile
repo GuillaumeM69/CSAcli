@@ -95,7 +95,7 @@ pipeline {
             steps {
                 echo 'Starting Stage 501'  
                  script {
-                    if (env.CSA_DEPLOY_FROM < '501') {
+                    if (env.CSA_DEPLOY_FROM < '420') {
                         bat 'node scan.js'
                     }
                     bat 'node deploy.js'
@@ -108,11 +108,10 @@ pipeline {
             CSA_Host = 'upgrade01'
             CSA_Port = '8178'
             CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-            CSA_DEPLOY_DISTRIBS = 'carlsource_v5.0.1'
             }
             steps {
                 echo 'Starting Stage BACKUP'
-                bat 'node backup.js'
+              //  bat 'node backup.js'
             }
         }
     }
