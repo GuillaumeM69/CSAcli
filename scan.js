@@ -21,6 +21,9 @@ soap.createClientAsync(url)
         console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))    
         CheckAction(client,result[0].execResult)
       
+    })
+    .catch((err)=>{
+        throw (err)
     });
 
 });

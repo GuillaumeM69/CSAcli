@@ -47,7 +47,7 @@ soap.createClientAsync(url)
       });
    })
    .catch(err=>{
-       console.log(err);
+       throw (err);
    });
         
 

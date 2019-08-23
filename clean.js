@@ -6,7 +6,6 @@ var soap = require('soap');
 //Définition des variables
 const CSAdminHost = process.env.CSA_Host
 const CSAdminPort = process.env.CSA_Port
-const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl';
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
 const CSAEQUIP = process.env.CSA_EQUIP
@@ -22,6 +21,9 @@ soap.createClientAsync(url)
         console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))    
         CheckAction(client,result[0].execResult)
       
+    })
+    .catch((err)=>{
+        throw (err)
     });
 
 });

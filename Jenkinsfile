@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '402'
+        CSA_DEPLOY_FROM = '420'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_DB = 'MSSQL'
         CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
