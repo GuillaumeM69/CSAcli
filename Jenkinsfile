@@ -7,7 +7,7 @@ pipeline {
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
         CSA_DEPLOY_FROM = '402'
-        CSA_MANUAL_RESTORE = 'ON'
+        CSA_MANUAL_RESTORE = 'OFF'
         CSA_BACKUP = 'OFF'
         CSA_DB = 'MSSQL'
         CSA_SERIAL_NUMBER = 'S1400467'
