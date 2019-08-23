@@ -18,16 +18,15 @@ soap.createClientAsync(url)
     console.log(new Date().toString() + ': Starting DEPLOY on '+CSAEQUIP)
     client.execActionAsync({ '_xml':xml(CSAEQUIP,CSADeployDistribs)})
     .then((result) => {
-
-        console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))    
-        CheckAction(client,result[0].execResult)
-      
+        console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2));    
+        CheckAction(client,result[0].execResult);
     })
-    .catch((err)={
+    .catch((err) => {
         throw (err)
     });
 
 });
+
 function CheckAction(client,Id){
     console.log(new Date().toString() + ': Check State of DEPLOY on '+CSAEQUIP)
     client.getActionStatusAsync({actionId:Id})
