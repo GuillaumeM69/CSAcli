@@ -46,7 +46,8 @@ function CheckAction(client,Id){
         {    
         console.log(new Date().toString() + ': DEPLOY done on '+CSAEQUIP)
         }else{
-            throw (result[0])
+            throw (result[0])      
+            process.exit(5);
         }
        
       

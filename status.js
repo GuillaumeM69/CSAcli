@@ -29,6 +29,7 @@ var SoapClient = soap.createClient(url, function(err, client) {
     client.getActionInfo( {actionId: ID }, function(err, result) {
         if(err){
             throw (err);
+            process.exit(5);
         }
 
         if(result){
