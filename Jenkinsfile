@@ -73,7 +73,7 @@ pipeline {
          steps {
                 echo 'Starting Stage 420'  
                  script {
-                    if (env.CSA_DEPLOY_FROM <= '402') {
+                    if (env.CSA_DEPLOY_FROM < '402') {
                         bat 'node scan.js'
                     }
                     bat 'node deploy.js'
