@@ -8,6 +8,7 @@ pipeline {
         CSA_DEPLOY_TO = '501'
         CSA_DEPLOY_FROM = '420'
         CSA_MANUAL_RESTORE = 'ON'
+        CSA_BACKUP = 'OFF'
         CSA_DB = 'MSSQL'
         CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
         CSA_BACKUP_PATH = 'C:/BACKUP'
@@ -104,6 +105,9 @@ pipeline {
             }
         }
         stage('Backup') {
+        when{
+            expression { env.CSA_MANUAL_RESTORE = 'ON' }
+         }
             environment { 
             CSA_Host = 'upgrade01'
             CSA_Port = '8178'
