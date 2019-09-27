@@ -55,7 +55,7 @@ pipeline {
          environment{
              CSA_Host = 'upgrade01'
              CSA_Port = '8177'
-             CSA_EQUIP = 'upgrade-420-mssql'
+             CSA_EQUIP = 'upgrade-402-mssql'
          }
             steps {
                 echo 'Starting Stage RESTORE' 
@@ -73,7 +73,7 @@ pipeline {
             steps {
                 echo 'Starting Stage 312'              
             }
-        }
+        }d
         stage('MAJ402') {
         when{
             expression { env.CSA_DEPLOY_FROM < '402' && env.CSA_DEPLOY_TO >= '402' }
