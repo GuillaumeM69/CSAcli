@@ -64,7 +64,7 @@ pipeline {
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
                 bat 'node scan.js'
               }
-            }
+            
         }
         stage('312') {
          when{
