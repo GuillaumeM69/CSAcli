@@ -25,6 +25,7 @@ soap.createClientAsync(url)
     })
     .catch((err)=>{
         throw (err)
+        process.exit(5);
     });
 
 });
@@ -45,6 +46,7 @@ function CheckAction(client,Id){
         console.log(new Date().toString() + ': BACKUP done on '+CSAEQUIP)
         }else{
             throw (result[0])
+            process.exit(5);
         }
        
       
