@@ -60,8 +60,8 @@ pipeline {
             steps {
                 echo 'Starting Stage RESTORE' 
                 bat 'node serial.js'
-                bat 'node addDistrib.js "C:\\Distribsv4.0.1\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
-                bat 'node addDistrib "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
+                bat 'node addDistrib.js "C:\\Distribs\\4.0.1\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
+                bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
                 bat 'node scan.js'
               }
             }
