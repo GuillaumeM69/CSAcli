@@ -60,8 +60,8 @@ pipeline {
             steps {
                 echo 'Starting Stage RESTORE' 
                 bat 'node serial.js'
-                bat 'node addDistrib.js "C:\Distribs\v4.0.1\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
-                bat 'node addDistrib "C:\Distribs\v4.0.1\carlsource_S1300385_v4.0.1-I3_c.zip"'
+                bat 'node addDistrib.js "C:\\Distribsv4.0.1\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
+                bat 'node addDistrib "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
                 bat 'node scan.js'
               }
             }
@@ -88,9 +88,9 @@ pipeline {
             steps {
                 
                 echo 'Starting Stage 402'
-               // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
-                bat 'node addDistrib.js "C:\Distribs\v4.0.2\I3\carlsource_S1300385_v4.0.2-I3_b.zip"'
-                bat 'node addDistrib.js "C:\Distribs\v4.0.2\I3\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
+               // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
+                bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_v4.0.2-I3_b.zip"'
+                bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
                 bat 'node deploy.js'
             }
              
@@ -112,10 +112,10 @@ pipeline {
                     if (env.CSA_DEPLOY_FROM < '402') {
                         bat 'node scan.js'
                     }
-                    bat 'node addDistrib.js "C:\Distribs\v4.2.0\I1\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
-                    bat 'node addDistrib.js "C:\Distribs\v4.2.0\I1\carlsource_S1300385_v4.2.0-I1_b.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_v4.2.0-I1_b.zip"'
                     bat 'node deploy.js'
-                 // bat 'setx -m JAVA_HOME "C:\Program Files\Java\jdk1.8.0_201\"'
+                 // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                  //def msg = bat(returnStdout: true, script: 'node test.js')
                  }
                             
@@ -136,8 +136,8 @@ pipeline {
                  script {
 
                     bat 'node serial.js'
-                    bat 'node addDistrib.js "C:\Distribs\v5.0.1\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
-                    bat 'node addDisrtib.js "C:\Distribs\v5.0.1\carlsource_S1300385_v5.0.1-I1_a.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
+                    bat 'node addDisrtib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
 
                     if (env.CSA_DEPLOY_FROM <= '420') {
                         bat 'node scan.js'
@@ -162,9 +162,9 @@ pipeline {
                 echo 'Starting Stage 501 I2 EN BABL'  
                  script {
 
-                    bat 'node addDistrib.js "C:\Distribs\v5.0.1\I2\carlsource_S1300385_fr_v5.0.1-I2-L1_a.zip"'
-                    bat 'node addDistrib.js "C:\Distribs\v5.0.1\I2\carlsource_S1300385_v5.0.1-I2_a.zip"'
-                    bat 'node addDistrib.js "C:\Distribs\v5.0.1\I2\carlsource_S1300385_en_v5.0.1-I2-L1_a.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_fr_v5.0.1-I2-L1_a.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_v5.0.1-I2_a.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_en_v5.0.1-I2-L1_a.zip"'
                     bat 'node deploy.js'
                  }
                             
