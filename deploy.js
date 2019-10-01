@@ -35,23 +35,26 @@ function CheckAction(client,Id){
     client.getActionStatusAsync({actionId:Id})
     .then((result) => {
      
-        //console.log(result[0].getActionStatus);
-        if (result[0].getActionStatus == 'RUNNING')
-        {
-       setTimeout(() => {
-        CheckAction(client,Id)
-       }, 5000);
-          
-        }else if (result[0].getActionStatus == 'DONE')
+        
+        if (result[0].getActionStatus == 'DONE')
         {    
         console.log(new Date().toString() + ': DEPLOY done on '+CSAEQUIP)
-        }else if (result[0].getActionStatus == 'FAILED')
+        process.exit(0);
+        }
+        
+        if (result[0].getActionStatus == 'FAILED')
         {
             console.log(new Date().toString() + ': DEPLOY FAILED on '+CSAEQUIP)
             process.exit(5);
         }
        
-      
+       setTimeout(() => {CheckAction(client,Id)}, 60000);
+
+    })
+    .catch((err)=>{
+        console.log("-----------------------------ERROR CHECK TASK------------------------------")
+        console.log(JSON.stringify(err, null, 2));
+        setTimeout(() => {CheckAction(client,Id)}, 60000);
     });
 }
 
