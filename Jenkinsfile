@@ -73,7 +73,7 @@ pipeline {
             steps {
                 echo 'Starting Stage 312'              
             }
-        }d
+        }
         stage('MAJ402') {
         when{
             expression { env.CSA_DEPLOY_FROM < '402' && env.CSA_DEPLOY_TO >= '402' }
