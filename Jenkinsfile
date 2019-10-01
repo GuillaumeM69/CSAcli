@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '401'
+        CSA_DEPLOY_FROM = '402'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'ON'
         CSA_DB = 'ds_mssql_2014'
@@ -92,6 +92,7 @@ pipeline {
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_v4.0.2-I3_b.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
                 bat 'node deploy.js'
+                bat 'node clean.js'
             }
              
         }
