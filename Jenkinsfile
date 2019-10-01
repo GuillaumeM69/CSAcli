@@ -55,7 +55,7 @@ pipeline {
          environment{
              CSA_Host = 'upgrade01'
              CSA_Port = '8177'
-             CSA_EQUIP = 'upgrade-402-mssql'
+             CSA_EQUIP = 'upgrade-420-mssql'
          }
             steps {
                 echo 'Starting Stage RESTORE' 
