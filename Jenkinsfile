@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '402'
+        CSA_DEPLOY_FROM = '420'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'ON'
         CSA_DB = 'ds_mssql_2014'
@@ -35,7 +35,7 @@ pipeline {
                      {
                         bat 'npm install'
                         bat 'node setDS.js'
-                        bat 'node serial.js'
+                        bat 'node serial.js upgrade-402-mssql'
                         bat 'node restore.js'
                        
                     }
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 echo 'Starting Stage RESTORE' 
                 bat 'npm install'
-                bat 'node serial.js'
+                bat 'node serial.js upgrade-420-mssql'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
                 bat 'node scan.js'
@@ -114,7 +114,7 @@ pipeline {
                     }
                     bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_v4.2.0-I1_b.zip"'
-              ////      bat 'node deploy.js'
+                 bat 'node deploy.js'
                  // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                  //def msg = bat(returnStdout: true, script: 'node test.js')
                  }
@@ -137,11 +137,12 @@ pipeline {
                  script {
                     bat 'npm install'
                     bat 'node addlicence.js'
-                    bat 'node serial.js'
+                    bat 'node serial.js upgrade-501-mssql-jboss'
+                    bat 'node serial.js upgrade-501-mssql-tomcat'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
 
-                    if (env.CSA_DEPLOY_FROM < '420') {
+                    if (env.CSA_MANUAL_RESTORE == 'ON') {
                         bat 'node scan.js'
                     }
 
@@ -174,7 +175,7 @@ pipeline {
         }
         stage('Backup') {
         when{
-            expression { env.CSA_MANUAL_RESTORE = 'ON' }
+            expression { env.CSA_BACKUP = 'ON' }
          }
             environment { 
             CSA_Host = 'upgrade01'

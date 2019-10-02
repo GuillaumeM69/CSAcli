@@ -13,6 +13,16 @@ const CSASerialNumber = process.env.CSA_SERIAL_NUMBER
 const CSAEQUIP = process.env.CSA_EQUIP
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
+
+const CSAEQUIP =  process.argv[2];
+
+
+if(!CSAEQUIP){
+    process.exit(5);
+    console.log("any argument")
+}
+
+
 soap.createClientAsync(url)
 .then((client) => {
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
