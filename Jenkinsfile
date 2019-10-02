@@ -139,7 +139,7 @@ pipeline {
                     bat 'node addlicence.js'
                     bat 'node serial.js'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
-                    bat 'node addDisrtib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
+                    bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
 
                     if (env.CSA_DEPLOY_FROM < '420') {
                         bat 'node scan.js'
