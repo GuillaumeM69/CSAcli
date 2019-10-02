@@ -116,7 +116,7 @@ pipeline {
                     }
                     bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_v4.2.0-I1_b.zip"'
-                    bat 'node deploy.js'
+              ////      bat 'node deploy.js'
                  // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                  //def msg = bat(returnStdout: true, script: 'node test.js')
                  }
@@ -136,12 +136,12 @@ pipeline {
             steps {
                 echo 'Starting Stage 501'  
                  script {
-
+                    bat 'node addlicence.js'
                     bat 'node serial.js'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
                     bat 'node addDisrtib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
 
-                    if (env.CSA_DEPLOY_FROM <= '420') {
+                    if (env.CSA_DEPLOY_FROM < '420') {
                         bat 'node scan.js'
                     }
 
