@@ -10,7 +10,6 @@ const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
 const CSASerialNumber = process.env.CSA_SERIAL_NUMBER
-const CSAEQUIP = process.env.CSA_EQUIP
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
 
