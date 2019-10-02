@@ -92,6 +92,7 @@ pipeline {
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_v4.0.2-I3_b.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
                 bat 'node deploy.js'
+                bat 'node stop.js'
                 bat 'node clean.js'
             }
              
