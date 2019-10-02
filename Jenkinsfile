@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '420'
+        CSA_DEPLOY_FROM = '402'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'ON'
         CSA_DB = 'ds_mssql_2014'
@@ -16,7 +16,7 @@ pipeline {
 
         stage('RESTORE 402') {
          when{
-            expression { env.CSA_MANUAL_RESTORE == 'OFF' && env.CSA_DEPLOY_FROM == '402'}
+            expression { env.CSA_MANUAL_RESTORE != 'ON' && env.CSA_DEPLOY_FROM == '402'}
          }  
          environment{
              CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
@@ -34,8 +34,8 @@ pipeline {
                     if (env.CSA_DEPLOY_FROM == '402')
                      {
                         bat 'npm install'
-                        bat 'node setDS.js'
-                        bat 'node serial.js upgrade-402-mssql'
+                        bat 'node ChangeSerial.js ds_mssql_2014'
+                        bat 'node ChangeSerial.js upgrade-402-mssql ds_mssql_2014'
                         bat 'node restore.js'
                        
                     }
@@ -54,10 +54,12 @@ pipeline {
             steps {
                 echo 'Starting Stage RESTORE' 
                 bat 'npm install'
-                bat 'node serial.js upgrade-420-mssql'
+                bat 'node addlicence.js'
+                bat 'node ChangeSerial.js ds_mssql_2014'
+                bat 'node ChangeSerial.js upgrade-420-mssql ds_mssql_2014'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
-                bat 'node scan.js'
+               
               }
             
         }
@@ -85,9 +87,13 @@ pipeline {
                 
                 echo 'Starting Stage 402'
                 bat 'npm install'
+                bat 'node addlicence.js'
+                bat 'node ChangeSerial.js ds_mssql_2014'
+                bat 'node ChangeSerial.js upgrade-402-mssql ds_mssql_2014'
                // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_v4.0.2-I3_b.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
+                bat 'node scan.js'
                 bat 'node deploy.js'
                 bat 'node stop.js'
                 bat 'node clean.js'
@@ -108,17 +114,19 @@ pipeline {
          steps {
                 echo 'Starting Stage 420'  
                 bat 'npm install'
-                 script {
-                    if (env.CSA_DEPLOY_FROM < '402') {
-                        bat 'node scan.js'
-                    }
-                    bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
-                    bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_v4.2.0-I1_b.zip"'
-                 bat 'node deploy.js'
+                bat 'node addlicence.js'
+                bat 'node ChangeSerial.js ds_mssql_2014'
+                bat 'node ChangeSerial.js upgrade-420-mssql ds_mssql_2014'
+
+                bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
+                bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_v4.2.0-I1_b.zip"'
+               
+                bat 'node scan.js'
+                bat 'node deploy.js'
                  // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                  //def msg = bat(returnStdout: true, script: 'node test.js')
-                 }
-                            
+                bat 'node stop.js'
+                bat 'node clean.js'           
             }
         }
         stage('MAJ501') {
@@ -137,16 +145,17 @@ pipeline {
                  script {
                     bat 'npm install'
                     bat 'node addlicence.js'
-                    bat 'node serial.js upgrade-501-mssql-jboss'
-                    bat 'node serial.js upgrade-501-mssql-tomcat'
+                    bat 'node ChangeSerial.js ds_mssql_2014'
+                    bat 'node ChangeSerial.js upgrade-501-mssql-jboss ds_mssql_2014'
+                    bat 'node ChangeSerial.js upgrade-501-mssql-tomcat ds_mssql_2014'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
 
-                    if (env.CSA_MANUAL_RESTORE == 'ON') {
-                        bat 'node scan.js'
-                    }
 
+                    bat 'node scan.js'
                     bat 'node deploy.js'
+                    bat 'node stop.js'
+                    bat 'node clean.js'      
                  }
                             
             }
@@ -158,17 +167,23 @@ pipeline {
         environment { 
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'
-        CSA_EQUIP = 'upgrade-501-mssql-jboss'
+        CSA_EQUIP = 'upgrade-501-mssql-tomcat'
         CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1'
         }
             steps {
                 echo 'Starting Stage 501 I2 EN BABL'  
                  script {
                     bat 'npm install'
+                    bat 'node addlicence.js'
+                    bat 'node ChangeSerial.js ds_mssql_2014'
+                    bat 'node ChangeSerial.js upgrade-501-mssql-tomcat ds_mssql_2014'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_fr_v5.0.1-I2-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_v5.0.1-I2_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_en_v5.0.1-I2-L1_a.zip"'
+                    bat 'node scan.js'
                     bat 'node deploy.js'
+                    bat 'node stop.js'
+                    bat 'node clean.js'          
                  }
                             
             }

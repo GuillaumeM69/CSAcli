@@ -28,6 +28,9 @@ soap.createClientAsync(url)
     client.setSecurity(new soap.BasicAuthSecurity(CSAdminLogin, CSAdminPassword))
     console.log(new Date().toString() + ': Starting action on '+CSAEQUIP)
  
+
+
+
     client.getEquipmentInfoAsync({EquipmentName:CSAEQUIP})
     .then((result)=>{
         for (let index = 0; index < result[0].getEquipmentInfo.entry.length; index++) {
@@ -39,26 +42,31 @@ soap.createClientAsync(url)
             }
         }
 
-    // mise à jour de la licence de l'équipement datasource
-   client.updateEquipmentAsync({'_xml':getXml(CSAdatasource,CSASerialNumber,CSAdatasource)})
-   .then((result) => {
-       console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))
-       // mise à jour de l'équipement instance et lien avec le datasource
-      client.updateEquipmentAsync({'_xml':getXml(CSAEQUIP,CSASerialNumber,CSAdatasource)})
-      .then((result)=>{
-        console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))
-      })
-      .catch(err=>{
-        console.log(JSON.stringify(err.cause.body, null, 2));;
-        process.exit(5);
-    });
-   })
-   .catch(err=>{
-      
-       console.log(JSON.stringify(err.cause.body, null, 2));
-       process.exit(5);
-   });
-        
+
+            // mise à jour de l'équipement instance et lien avec le datasource
+            client.updateEquipmentAsync({'_xml':getXml(CSAEQUIP,CSASerialNumber,CSAdatasource)})
+            .then((result)=>{
+            console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))
+            })
+            .catch(err=>{
+            console.log(JSON.stringify(err.cause.body, null, 2));;
+            process.exit(5);
+            });        
+
+
+                
+            // mise à jour de la licence de l'équipement datasource
+            client.updateEquipmentAsync({'_xml':getXml(CSAdatasource,CSASerialNumber,CSAdatasource)})
+            .then((result) => {
+                console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2))
+                // mise à jour de l'équipement instance et lien avec le datasour
+            })
+            .catch(err=>{
+                
+                console.log(JSON.stringify(err.cause.body, null, 2));
+                process.exit(5);
+            });
+                    
 
         })
         .catch(err=>{
