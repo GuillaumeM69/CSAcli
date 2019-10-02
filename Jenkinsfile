@@ -13,13 +13,7 @@ pipeline {
         CSA_SERIAL_NUMBER = 'S1300385'
     }
     stages {    
-        stage('INIT') {
-            steps {
-                echo 'Starting Stage INIT' 
-                bat 'npm install'
-                bat 'node addlicence.js'
-            }
-        }
+
         stage('RESTORE 402') {
          when{
             expression { env.CSA_MANUAL_RESTORE == 'OFF' && env.CSA_DEPLOY_FROM == '402'}
@@ -39,7 +33,7 @@ pipeline {
                 script {
                     if (env.CSA_DEPLOY_FROM == '402')
                      {
-
+                        bat 'npm install'
                         bat 'node setDS.js'
                         bat 'node serial.js'
                         bat 'node restore.js'
@@ -59,6 +53,7 @@ pipeline {
          }
             steps {
                 echo 'Starting Stage RESTORE' 
+                bat 'npm install'
                 bat 'node serial.js'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
@@ -71,7 +66,8 @@ pipeline {
             expression { env.CSA_DEPLOY_FROM < '312' && env.CSA_DEPLOY_TO >= '312' }
          }
             steps {
-                echo 'Starting Stage 312'              
+                echo 'Starting Stage 312'  
+                bat 'npm install'            
             }
         }
         stage('MAJ402') {
@@ -88,6 +84,7 @@ pipeline {
             steps {
                 
                 echo 'Starting Stage 402'
+                bat 'npm install'
                // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_v4.0.2-I3_b.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
@@ -110,6 +107,7 @@ pipeline {
         }
          steps {
                 echo 'Starting Stage 420'  
+                bat 'npm install'
                  script {
                     if (env.CSA_DEPLOY_FROM < '402') {
                         bat 'node scan.js'
@@ -135,7 +133,9 @@ pipeline {
         }
             steps {
                 echo 'Starting Stage 501'  
+
                  script {
+                    bat 'npm install'
                     bat 'node addlicence.js'
                     bat 'node serial.js'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
@@ -163,7 +163,7 @@ pipeline {
             steps {
                 echo 'Starting Stage 501 I2 EN BABL'  
                  script {
-
+                    bat 'npm install'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_fr_v5.0.1-I2-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_v5.0.1-I2_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_en_v5.0.1-I2-L1_a.zip"'
@@ -183,7 +183,7 @@ pipeline {
             }
             steps {
                 echo 'Starting Stage BACKUP'
-            
+                bat 'npm install'
                 bat 'node backup.js'
             }
         }
