@@ -63,7 +63,7 @@ soap.createClientAsync(url)
                     break;
                 case 'deploy.customer':
                     newSerial = CSASerialNumber+' : '+CSASerialNumber;
-                    if(newSerial == element.value.$value){
+                    if(newSerial == element.value.$value && !CSAEQUIPDS){
                         console.log('It\'s the same Serial')
                         process.exit(0);
                     }
