@@ -10,7 +10,7 @@ const CSAdminWsdl = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
 const CSASerialNumber = process.env.CSA_SERIAL_NUMBER
-const CSAEQUIP = process.env.CSA_EQUIP
+
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 
 
@@ -70,7 +70,7 @@ soap.createClientAsync(url)
 
         })
         .catch(err=>{
-            console.log(JSON.stringify(err.cause.body, null, 2));
+            console.log(JSON.stringify(err, null, 2));
             process.exit(5);
         })
       

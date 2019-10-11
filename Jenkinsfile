@@ -34,8 +34,8 @@ pipeline {
                     if (env.CSA_DEPLOY_FROM == '402')
                      {
                         bat 'npm install'
-                        bat 'node ChangeSerial.js ds_mssql_2014'
-                        bat 'node ChangeSerial.js upgrade-402-mssql ds_mssql_2014'
+                        bat 'node SerialChange.js ds_mssql_2014'
+                        bat 'node SerialChange.js upgrade-402-mssql ds_mssql_2014'
                         bat 'node restore.js'
                        
                     }
@@ -55,8 +55,8 @@ pipeline {
                 echo 'Starting Stage RESTORE' 
                 bat 'npm install'
                 bat 'node addlicence.js'
-                bat 'node ChangeSerial.js ds_mssql_2014'
-                bat 'node ChangeSerial.js upgrade-420-mssql ds_mssql_2014'
+                bat 'node SerialChange.js ds_mssql_2014'
+                bat 'node SerialChange.js upgrade-420-mssql ds_mssql_2014'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_fr_v4.0.1-I3-L1_c.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.1\\carlsource_S1300385_v4.0.1-I3_c.zip"'
                
@@ -88,8 +88,8 @@ pipeline {
                 echo 'Starting Stage 402'
                 bat 'npm install'
                 bat 'node addlicence.js'
-                bat 'node ChangeSerial.js ds_mssql_2014'
-                bat 'node ChangeSerial.js upgrade-402-mssql ds_mssql_2014'
+                bat 'node SerialChange.js ds_mssql_2014'
+                bat 'node SerialChange.js upgrade-402-mssql ds_mssql_2014'
                // bat 'setx -m JAVA_HOME "C:\\Program Files\\Java\\jdk1.8.0_201\\"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_v4.0.2-I3_b.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.0.2\\I3\\carlsource_S1300385_fr_v4.0.2-I3-L1_b.zip"'
@@ -115,8 +115,8 @@ pipeline {
                 echo 'Starting Stage 420'  
                 bat 'npm install'
                 bat 'node addlicence.js'
-                bat 'node ChangeSerial.js ds_mssql_2014'
-                bat 'node ChangeSerial.js upgrade-420-mssql ds_mssql_2014'
+                bat 'node SerialChange.js ds_mssql_2014'
+                bat 'node SerialChange.js upgrade-420-mssql ds_mssql_2014'
 
                 bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_fr_v4.2.0-I1-L1_b.zip"'
                 bat 'node addDistrib.js "C:\\Distribs\\v4.2.0\\I1\\carlsource_S1300385_v4.2.0-I1_b.zip"'
@@ -145,9 +145,9 @@ pipeline {
                  script {
                     bat 'npm install'
                     bat 'node addlicence.js'
-                    bat 'node ChangeSerial.js ds_mssql_2014'
-                    bat 'node ChangeSerial.js upgrade-501-mssql-jboss ds_mssql_2014'
-                    bat 'node ChangeSerial.js upgrade-501-mssql-tomcat ds_mssql_2014'
+                    bat 'node SerialChange.js ds_mssql_2014'
+                    bat 'node SerialChange.js upgrade-501-mssql-jboss ds_mssql_2014'
+                    bat 'node SerialChange.js upgrade-501-mssql-tomcat ds_mssql_2014'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
 
@@ -168,15 +168,15 @@ pipeline {
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'
         CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-        CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1'
+        CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1'// Ajout livrable
         }
             steps {
                 echo 'Starting Stage 501 I2 EN BABL'  
                  script {
                     bat 'npm install'
                     bat 'node addlicence.js'
-                    bat 'node ChangeSerial.js ds_mssql_2014'
-                    bat 'node ChangeSerial.js upgrade-501-mssql-tomcat ds_mssql_2014'
+                    bat 'node SerialChange.js ds_mssql_2014'
+                    bat 'node SerialChange.js upgrade-501-mssql-tomcat ds_mssql_2014'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_fr_v5.0.1-I2-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_v5.0.1-I2_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_en_v5.0.1-I2-L1_a.zip"'
@@ -193,14 +193,14 @@ pipeline {
             expression { env.CSA_BACKUP = 'ON' }
          }
             environment { 
-            CSA_Host = 'upgrade01'
+            CSA_Host = 'upgrade01'  
             CSA_Port = '8178'
             CSA_EQUIP = 'upgrade-501-mssql-tomcat'
             }
             steps {
                 echo 'Starting Stage BACKUP'
                 bat 'npm install'
-                bat 'node backup.js'
+                bat 'node backup.js' //vérifier la présence des pièces jointes sur des partages ??
             }
         }
     }
