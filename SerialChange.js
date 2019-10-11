@@ -16,6 +16,7 @@ var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
 const CSAEQUIP =  process.argv[2];
 const CSAEQUIPDS =  process.argv[3];
 
+
 if(!CSAEQUIP){
     process.exit(5);
     console.log("any argument")
@@ -32,6 +33,8 @@ soap.createClientAsync(url)
 
     client.getEquipmentInfoAsync({EquipmentName:CSAEQUIP})
     .then((result)=>{
+
+              console.log(new Date().toString() + ': ' + JSON.stringify(result[0].getEquipmentInfo.entry, null, 2))
 
         entrys = [];
         for (let index = 0; index < result[0].getEquipmentInfo.entry.length; index++) {
@@ -52,11 +55,19 @@ soap.createClientAsync(url)
 
             switch (element.key) {
 
+                case 'prototype':
+                   // entrys.push(xmlValue(element.key,CSASerialNumber+' : '+CSASerialNumber))
+                    break;
                 case '':
                 console.log('value NUll:'+element.value.$value)
                     break;
                 case 'deploy.customer':
-                entrys.push(xmlValue(element.key,CSASerialNumber+' : '+CSASerialNumber))
+                    newSerial = CSASerialNumber+' : '+CSASerialNumber;
+                    if(newSerial == element.value.$value){
+                        console.log('It\'s the same Serial')
+                        process.exit(0);
+                    }
+                    entrys.push(xmlValue(element.key,newSerial))
                     break;
                 case 'eqptName':
                 entrys.push(xmlValue(element.key,element.value.$value+'_new'))
@@ -73,6 +84,8 @@ soap.createClientAsync(url)
               //console.log( element.key+'value => '+element.value.$value )
         }
        // console.log(getXml(entrys));
+
+           console.log("AddEquipment")
         client.addEquipmentAsync({ '_xml':getXml(entrys)})
         .then((result) => {
             console.log(new Date().toString() + ': ' + JSON.stringify(result[0], null, 2));    
@@ -91,6 +104,11 @@ soap.createClientAsync(url)
             process.exit(5);
             })
             
+            })
+            .catch((err)=>{
+                console.log("-----------------------------ERROR- removeEquipmentAsync-----------------------------")
+                console.log(JSON.stringify(err.cause.body, null, 2));
+                process.exit(5);
             });
 
 
@@ -102,12 +120,8 @@ soap.createClientAsync(url)
             process.exit(5);
   
 
-        })
-        .catch((err)=>{
-            console.log("-----------------------------ERROR- removeEquipmentAsync-----------------------------")
-            console.log(JSON.stringify(err.cause.body, null, 2));
-            process.exit(5);
         });
+
 
        
          })
@@ -127,7 +141,7 @@ soap.createClientAsync(url)
 
 
 function xmlValue(key,value){
-    console.log(key+ ' => '+value+'\r');
+    //console.log(key+ ' => '+value+'\r');
     data =
     '<entry>\
     <key>'+key+'</key>\
