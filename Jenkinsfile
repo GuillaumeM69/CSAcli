@@ -166,7 +166,7 @@ pipeline {
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'
         CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-        CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1'// Ajout livrable
+        CSA_DEPLOY_DISTRIBS = 'carlsource_S1300385_v5.0.1-I2'// Ajout livrable carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1 
         }
             steps {
                 echo 'Starting Stage 501 I2 EN BABL'  
@@ -188,7 +188,7 @@ pipeline {
         }
         stage('Backup') {
         when{
-            expression { env.CSA_BACKUP = 'ON' }
+            expression { env.CSA_BACKUP == 'ON' }
          }
             environment { 
             CSA_Host = 'upgrade01'  
