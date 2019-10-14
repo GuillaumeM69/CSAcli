@@ -6,7 +6,7 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '402'
+        CSA_DEPLOY_FROM = '501'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'ON'
         CSA_DB = 'ds_mssql_2014'
