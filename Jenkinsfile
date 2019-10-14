@@ -154,16 +154,14 @@ pipeline {
 
                     bat 'node scan.js'
                     bat 'node deploy.js'
-                    bat 'node stop.js'
-                    bat 'node clean.js'      
+                    bat 'node stop.js upgrade-501-mssql-tomcat'
+                    bat 'node clean.js pgrade-501-mssql-tomcat'
                  }
                             
             }
         }
         stage('501 I2 EN BABL') {
-        when{
-            expression { env.CSA_DEPLOY_FROM < '501' && env.CSA_DEPLOY_TO >= '501' }
-         }
+   
         environment { 
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'

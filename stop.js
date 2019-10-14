@@ -8,8 +8,12 @@ const CSAdminHost = process.env.CSA_Host
 const CSAdminPort = process.env.CSA_Port
 const CSAdminLogin = process.env.CSA_Login
 const CSAdminPassword = process.env.CSA_Password
-const CSAEQUIP = process.env.CSA_EQUIP
+var CSAEQUIP = process.env.CSA_EQUIP
 var url = 'http://'+CSAdminHost+':'+CSAdminPort+'/CSAdmin/webserv/cli?wsdl'
+
+if (process.argv[2]){
+    CSAEQUIP = process.argv[2]
+}
 
 soap.createClientAsync(url)
 .then((client) => {
