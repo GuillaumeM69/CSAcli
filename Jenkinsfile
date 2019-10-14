@@ -6,7 +6,8 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '501'
+        CSA_DEPLOY_FROM = '401'
+        CSA_DEPLOY_SPE = 'ON'
         CSA_MANUAL_RESTORE = 'ON'
         CSA_BACKUP = 'ON'
         CSA_DB = 'ds_mssql_2014'
@@ -14,35 +15,7 @@ pipeline {
     }
     stages {    
 
-        stage('RESTORE 402') {
-         when{
-            expression { env.CSA_MANUAL_RESTORE != 'ON' && env.CSA_DEPLOY_FROM == '402'}
-         }  
-         environment{
-             CSA_PATH_DOCS = 'C:/CARLdata/extfiles/instance8080'
-             CSA_BACKUP_PATH = 'C:/BACKUP'
-             CSA_BACKUP_APP = 'backup_S1400467_app_jb_16ca96d905d-5d_20190819163454009.zip'
-             CSA_BACKUP_DAT = 'backup_S1400467_dat_ms_16ca96d905d-5d_20190819163454009.zip'
-             CSA_Host = 'upgrade01'
-             CSA_Port = '8177'
-             CSA_EQUIP = 'upgrade-420-mssql'
-             CSA_DISTRIB_PATH = 'c:/Distribs/402/'
-         }
-            steps {
-                echo 'Starting Stage RESTORE' 
-                script {
-                    if (env.CSA_DEPLOY_FROM == '402')
-                     {
-                        bat 'npm install'
-                        bat 'node SerialChange.js ds_mssql_2014'
-                        bat 'node SerialChange.js upgrade-402-mssql ds_mssql_2014'
-                        bat 'node restore.js'
-                       
-                    }
-                }
-            }
-        }  
-        stage('Manual Restore') {
+        stage('After Manual Restore') {
          when{
             expression { env.CSA_MANUAL_RESTORE == 'ON'}
          }  
@@ -72,7 +45,7 @@ pipeline {
                 bat 'npm install'            
             }
         }
-        stage('MAJ402') {
+        stage('Upgrade 4.0.2') {
         when{
             expression { env.CSA_DEPLOY_FROM < '402' && env.CSA_DEPLOY_TO >= '402' }
          }
@@ -100,7 +73,7 @@ pipeline {
             }
              
         }
-        stage('MAJ420') {
+        stage('Upgrade 4.2.0') {
 
         when{
             expression { env.CSA_DEPLOY_FROM < '420' && env.CSA_DEPLOY_TO >= '420' }
@@ -129,7 +102,7 @@ pipeline {
                 bat 'node clean.js'           
             }
         }
-        stage('MAJ501') {
+        stage('Upgrade 5.0.1') {
         when{
             expression { env.CSA_DEPLOY_FROM < '501' && env.CSA_DEPLOY_TO >= '501' }
          }
@@ -150,8 +123,6 @@ pipeline {
                     bat 'node SerialChange.js upgrade-501-mssql-tomcat ds_mssql_2014'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_fr_v5.0.1-I1-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
-
-
                     bat 'node scan.js'
                     bat 'node deploy.js'
                     bat 'node stop.js upgrade-501-mssql-tomcat'
@@ -160,13 +131,40 @@ pipeline {
                             
             }
         }
-        stage('501 I2 EN BABL') {
-   
+        stage('Deploy EN / BABL') {
+        when{
+            expression { env.CSA_DEPLOY_SPE == 'ON' }
+         }
         environment { 
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'
         CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-        CSA_DEPLOY_DISTRIBS = 'carlsource_S1300385_v5.0.1-I2'// Ajout livrable carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1 
+        CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1'
+        }
+            steps {
+                echo 'Starting Stage 501 I2 EN BABL'  
+                 script {
+                    bat 'npm install'
+                    bat 'node addlicence.js'
+                    bat 'node SerialChange.js ds_mssql_2014'
+                    bat 'node SerialChange.js upgrade-501-mssql-tomcat ds_mssql_2014'
+                    bat 'node scan.js'
+                    bat 'node deploy.js'
+                    bat 'node stop.js'
+                    bat 'node clean.js'          
+                 }
+                            
+            }
+        }
+        stage('Deploy I2 + PATCHS') {
+        when{
+            expression { env.CSA_DEPLOY_SPE == 'ON' }
+         }
+        environment { 
+        CSA_Host = 'upgrade01'
+        CSA_Port = '8178'
+        CSA_EQUIP = 'upgrade-501-mssql-tomcat'
+        CSA_DEPLOY_DISTRIBS = 'carlsource_S1300385_v5.0.1-I2,carlsource_v5.0.1-P19' 
         }
             steps {
                 echo 'Starting Stage 501 I2 EN BABL'  
@@ -186,7 +184,7 @@ pipeline {
                             
             }
         }
-        stage('Backup') {
+        stage('Backup CSA') {
         when{
             expression { env.CSA_BACKUP == 'ON' }
          }
@@ -198,6 +196,7 @@ pipeline {
             steps {
                 echo 'Starting Stage BACKUP'
                 bat 'npm install'
+                bat 'node scan.js'
                 bat 'node backup.js' //vérifier la présence des pièces jointes sur des partages ??
             }
         }
