@@ -131,7 +131,7 @@ pipeline {
                             
             }
         }
-        stage('Deploy EN / BABL') {
+        stage('Deploy I2 + PATCHS + EN + BABL') {
         when{
             expression { env.CSA_DEPLOY_SPE == 'ON' }
          }
@@ -139,32 +139,7 @@ pipeline {
         CSA_Host = 'upgrade01'
         CSA_Port = '8178'
         CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-        CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1'
-        }
-            steps {
-                echo 'Starting Stage 501 I2 EN BABL'  
-                 script {
-                    bat 'npm install'
-                    bat 'node addlicence.js'
-                    bat 'node SerialChange.js ds_mssql_2014'
-                    bat 'node SerialChange.js upgrade-501-mssql-tomcat ds_mssql_2014'
-                    bat 'node scan.js'
-                    bat 'node deploy.js'
-                    bat 'node stop.js'
-                    bat 'node clean.js'          
-                 }
-                            
-            }
-        }
-        stage('Deploy I2 + PATCHS') {
-        when{
-            expression { env.CSA_DEPLOY_SPE == 'ON' }
-         }
-        environment { 
-        CSA_Host = 'upgrade01'
-        CSA_Port = '8178'
-        CSA_EQUIP = 'upgrade-501-mssql-tomcat'
-        CSA_DEPLOY_DISTRIBS = 'carlsource_S1300385_v5.0.1-I2,carlsource_v5.0.1-P19' 
+        CSA_DEPLOY_DISTRIBS = 'carlsource_en_v5.0.1-L1,carlsource_babl_v4.0.1-A1,carlsource_S1300385_v5.0.1-I2,carlsource_v5.0.1-P19' 
         }
             steps {
                 echo 'Starting Stage 501 I2 EN BABL'  
