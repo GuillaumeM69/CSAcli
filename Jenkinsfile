@@ -6,10 +6,10 @@ pipeline {
         CSA_Login = 'root'
         CSA_Password = '123456'
         CSA_DEPLOY_TO = '501'
-        CSA_DEPLOY_FROM = '501'
+        CSA_DEPLOY_FROM = '401'
         CSA_DEPLOY_SPE = 'ON'
         CSA_MANUAL_RESTORE = 'ON'
-        CSA_BACKUP = 'ON'
+        CSA_BACKUP = 'OFF'
         CSA_DB = 'ds_mssql_2014'
         CSA_SERIAL_NUMBER = 'S1300385'
     }
@@ -125,8 +125,6 @@ pipeline {
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\carlsource_S1300385_v5.0.1-I1_a.zip"'
                     bat 'node scan.js'
                     bat 'node deploy.js'
-                    bat 'node stop.js upgrade-501-mssql-tomcat'
-                    bat 'node clean.js pgrade-501-mssql-tomcat'
                  }
                             
             }
