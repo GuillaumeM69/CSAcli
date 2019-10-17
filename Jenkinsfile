@@ -143,16 +143,10 @@ pipeline {
                 echo 'Starting Stage 501 I2 EN BABL'  
                  script {
                     bat 'npm install'
-                    bat 'node addlicence.js'
-                    bat 'node SerialChange.js ds_mssql_2014'
-                    bat 'node SerialChange.js upgrade-501-mssql-tomcat ds_mssql_2014'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_fr_v5.0.1-I2-L1_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_v5.0.1-I2_a.zip"'
                     bat 'node addDistrib.js "C:\\Distribs\\v5.0.1\\I2\\carlsource_S1300385_en_v5.0.1-I2-L1_a.zip"'
-                    bat 'node scan.js'
                     bat 'node deploy.js'
-                    bat 'node stop.js'
-                    bat 'node clean.js'          
                  }
                             
             }
